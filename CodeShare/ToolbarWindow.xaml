@@ -9,12 +9,28 @@
         Height="60"
         Width="400"
         WindowStyle="None"
+        
         AllowsTransparency="True"
         Background="Transparent"
         ResizeMode="NoResize">
     <Border CornerRadius="10"
+            BorderBrush="#6654e8"
+            BorderThickness="1"
             Background="#1f1f1f"
             Padding="15">
-        <Button Content="OK" />
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <Button Grid.Column="0" />
+            <Rectangle Width="1"
+                       Margin="5, 0"
+                       Fill="White"
+                       Grid.Column="1"/>
+            <Button Content="Hello"
+                    Grid.Column="2" />
+        </Grid>
     </Border>
 </Window>

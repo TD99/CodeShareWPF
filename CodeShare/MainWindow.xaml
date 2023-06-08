@@ -5,10 +5,19 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CodeShare"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow"
+        Height="450"
+        Width="800">
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
         <Button x:Name="ToolbarSummonBtn"
+                VerticalAlignment="Top"
                 Content="Summon Toolbar Window"
                 Click="ToolbarSummonBtn_Click" />
+        <Frame Source="MVVM/View/UserPage.xaml"
+               Grid.Row="1"/>
     </Grid>
 </Window>
