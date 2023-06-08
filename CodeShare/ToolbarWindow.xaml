@@ -3,13 +3,14 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:controls="clr-namespace:CodeShare.Controls"
         xmlns:local="clr-namespace:CodeShare"
         mc:Ignorable="d"
         Title="ToolbarWindow"
-        Height="60"
+        Height="55"
         Width="400"
         WindowStyle="None"
-        
+        Topmost="True"
         AllowsTransparency="True"
         Background="Transparent"
         ResizeMode="NoResize">
@@ -17,20 +18,29 @@
             BorderBrush="#6654e8"
             BorderThickness="1"
             Background="#1f1f1f"
-            Padding="15">
+            Padding="10">
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
-            <Button Grid.Column="0" />
-            <Rectangle Width="1"
+            <Button Grid.Column="0"
+                    Style="{StaticResource ToolbarButton}" />
+            <Rectangle Width="0.5"
                        Margin="5, 0"
-                       Fill="White"
+                       Fill="#885b5970"
                        Grid.Column="1"/>
-            <Button Content="Hello"
-                    Grid.Column="2" />
+            <Button x:Name="SettingsBtn"
+                    Grid.Column="2"
+                    Click="SettingsBtn_Click"
+                    Style="{StaticResource ToolbarButton}">
+                <Button.Content>
+                    <controls:Icon FontFamily="{StaticResource faSolid}"
+                                   Unicode="f013"
+                                   Identifier="gear" />
+                </Button.Content>
+            </Button>
         </Grid>
     </Border>
 </Window>

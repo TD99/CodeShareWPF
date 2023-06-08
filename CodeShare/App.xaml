@@ -5,6 +5,14 @@
              StartupUri="MainWindow.xaml"
              ShutdownMode="OnLastWindowClose">
     <Application.Resources>
-         
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Style/ToolbarButton.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            
+            <FontFamily x:Key="faRegular">Assets/Fonts/#Font Awesome 6 Free Regular</FontFamily>
+            <FontFamily x:Key="faSolid">Assets/Fonts/#Font Awesome 6 Free Solid</FontFamily>
+            <FontFamily x:Key="faBrands">Assets/Fonts/#Font Awesome 6 Brands Regular</FontFamily>
+        </ResourceDictionary>
     </Application.Resources>
 </Application>

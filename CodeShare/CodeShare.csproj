@@ -11,7 +11,12 @@
     <Folder Include="MVVM\Model\" />
     <Folder Include="MVVM\ViewModel\" />
     <Folder Include="Core\" />
-    <Folder Include="Style\" />
+  </ItemGroup>
+	
+  <ItemGroup>
+	<Content Include="Assets\Fonts\**">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	</Content>
   </ItemGroup>
 
 </Project>

@@ -11,5 +11,10 @@ namespace CodeShare
         {
             InitializeComponent();
         }
+
+        private void SettingsBtn_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
