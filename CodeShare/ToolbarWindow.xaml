@@ -13,10 +13,11 @@
         Topmost="True"
         AllowsTransparency="True"
         Background="Transparent"
-        ResizeMode="NoResize">
+        ResizeMode="NoResize"
+        ShowInTaskbar="False">
     <Border CornerRadius="10"
             BorderBrush="#6654e8"
-            BorderThickness="1"
+            BorderThickness="1.5"
             Background="#1f1f1f"
             Padding="10">
         <Grid>
