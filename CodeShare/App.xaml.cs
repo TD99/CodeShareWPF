@@ -1,9 +1,14 @@
 ﻿using System;
 using System.Drawing;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using CodeShare.Core;
+using CodeShare.MVVM.Model;
 using Hardcodet.Wpf.TaskbarNotification;
+using NHotkey;
+using NHotkey.Wpf;
 
 namespace CodeShare
 {
@@ -11,6 +16,7 @@ namespace CodeShare
     {
         public static MainWindow ConfigWindow = new MainWindow();
         public static ToolbarWindow ToolbarWindow = new ToolbarWindow();
+        public static HotKey ToolbarHK = new HotKey("ToolbarHotKey", ModifierKeys.Control | ModifierKeys.Alt, Key.F);
         private TaskbarIcon notifyIcon;
 
         public App()
@@ -28,6 +34,13 @@ namespace CodeShare
             }
         }
 
+        public static void OpenConfigWindow(MainWindow overrideWindow)
+        {
+            ConfigWindow.Close();
+            ConfigWindow = overrideWindow;
+            ConfigWindow.Show();
+        }
+
         public static void OpenToolbarWindow()
         {
             bool is_successful = WindowTools.TryOpenWindow(App.ToolbarWindow);
@@ -36,6 +49,13 @@ namespace CodeShare
                 ToolbarWindow = new ToolbarWindow();
                 ToolbarWindow.Show();
             }
+        }
+
+        public static void OpenToolbarWindow(ToolbarWindow overrideWindow)
+        {
+            ToolbarWindow.Close();
+            ToolbarWindow = overrideWindow;
+            ToolbarWindow.Show();
         }
 
         private void Application_Startup(object sender, StartupEventArgs e)
@@ -67,7 +87,21 @@ namespace CodeShare
             // Assign the context menu to the tray icon
             notifyIcon.ContextMenu = contextMenu;
 
+            HotkeyManager.Current.AddOrReplace(ToolbarHK.Name, ToolbarHK.Key, ToolbarHK.Modifiers, HandleToolbarHK);
+
             ToolbarWindow.Show();
+        }
+
+        private void HandleToolbarHK(object sender, HotkeyEventArgs e)
+        {
+            var clipboardBackup = Clipboard.GetText();
+
+            Thread.Sleep(100);
+            System.Windows.Forms.SendKeys.SendWait("^c");
+            var selectedText = Clipboard.GetText();
+            OpenToolbarWindow(new ToolbarWindow(selectedText));
+
+            Clipboard.SetText(clipboardBackup);
         }
 
         private void OnProcessExit(object sender, EventArgs e)
@@ -83,6 +117,7 @@ namespace CodeShare
 
         public void PrepareShutdown()
         {
+            HotkeyManager.Current.Remove(ToolbarHK.Name);
             notifyIcon.Dispose();
         }
     }

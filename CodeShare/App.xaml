@@ -8,6 +8,7 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Style/ToolbarButton.xaml" />
+                <ResourceDictionary Source="Style/Global.xaml" />
             </ResourceDictionary.MergedDictionaries>
             
             <FontFamily x:Key="faRegular">Assets/Fonts/#Font Awesome 6 Free Regular</FontFamily>

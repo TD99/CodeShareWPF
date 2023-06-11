@@ -19,13 +19,18 @@ namespace CodeShare
         private Point MouseOffset;
         private Point DefaultCenter;
 
-        public ToolbarWindow()
+        public ToolbarWindow(string? selected = null)
         {
             InitializeComponent();
             this.DefaultCenter = new Point((SystemParameters.WorkArea.Width - this.ActualWidth) / 2, 20);
             WindowTools.HideWindowFromAltTab(this);
             SystemEvents.DisplaySettingsChanged += OnDisplaySettingsChanged;
             this.LocationChanged += MainWindow_LocationChanged;
+
+            if (selected != null)
+            {
+                DbgBtn.Content = selected;
+            }
         }
 
         private void OnDisplaySettingsChanged(object sender, EventArgs e)
@@ -147,10 +152,34 @@ namespace CodeShare
             }
         }
 
-
         private void QuitBtn_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
+        }
+
+        private void Window_PreviewDragEnter(object sender, DragEventArgs e)
+        {
+            ToolbarButtonGrid.Visibility = Visibility.Collapsed;
+        }
+
+        private void Window_Drop(object sender, DragEventArgs e)
+        {
+            ToolbarButtonGrid.Visibility = Visibility.Visible;
+
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+
+            }
+            else if (e.Data.GetDataPresent(DataFormats.Text))
+            {
+                string text = (string)e.Data.GetData(DataFormats.Text);
+                App.OpenToolbarWindow(new ToolbarWindow(text));
+            }
+        }
+
+        private void Window_PreviewDragLeave(object sender, DragEventArgs e)
+        {
+            ToolbarButtonGrid.Visibility = Visibility.Visible;
         }
     }
 }

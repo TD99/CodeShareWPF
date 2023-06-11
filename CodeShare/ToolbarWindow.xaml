@@ -15,21 +15,43 @@
         Background="Transparent"
         ResizeMode="NoResize"
         ShowInTaskbar="False"
-        MouseMove="Window_MouseMove">
+        MouseMove="Window_MouseMove"
+        AllowDrop="True"
+        PreviewDragEnter="Window_PreviewDragEnter"
+        PreviewDragLeave="Window_PreviewDragLeave"
+        Drop="Window_Drop">
     <Border CornerRadius="10"
             BorderBrush="#6654e8"
             BorderThickness="1.5"
             Background="#1f1f1f"
             Padding="10">
         <Grid>
-            <Grid>
+            <Border x:Name="DragNDropBorder"
+                    BorderThickness="3"
+                    BorderBrush="White"
+                    CornerRadius="10">
+                <Rectangle Fill="#88FFFFFF" />
+
+                <Border.Style>
+                    <Style TargetType="Border">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding ElementName=ToolbarButtonGrid, Path=Visibility}" Value="Visible">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Border.Style>
+            </Border>
+            
+            <Grid x:Name="ToolbarButtonGrid">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
                 
-                <Button Grid.Column="0"
+                <Button x:Name="DbgBtn"
+                        Grid.Column="0"
                         Style="{StaticResource ToolbarButton}" />
                 <Rectangle Width="0.5"
                            Margin="5, 0"
@@ -74,7 +96,17 @@
                   MouseEnter="MoveLine_MouseEnter"
                   MouseLeave="MoveLine_MouseLeave"
                   MouseDown="MoveLine_MouseDown"
-                  MouseUp="MoveLine_MouseUp" />
+                  MouseUp="MoveLine_MouseUp">
+                <Line.Style>
+                    <Style TargetType="Line">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding ElementName=DragNDropBorder, Path=Visibility}" Value="Visible">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Line.Style>
+            </Line>
         </Grid>
     </Border>
 </Window>
