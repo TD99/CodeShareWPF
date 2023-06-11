@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.33627.172
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeShare", "CodeShare\CodeShare.csproj", "{7FF5955C-08F8-4939-9E68-5AF3382F58F3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeShare", "CodeShare\CodeShare.csproj", "{7FF5955C-08F8-4939-9E68-5AF3382F58F3}"
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "CodeShareSetup", "CodeShareSetup\CodeShareSetup.vdproj", "{C62B7813-F801-4ADD-80DD-9167FEE8E69F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,8 @@ Global
 		{7FF5955C-08F8-4939-9E68-5AF3382F58F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7FF5955C-08F8-4939-9E68-5AF3382F58F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7FF5955C-08F8-4939-9E68-5AF3382F58F3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C62B7813-F801-4ADD-80DD-9167FEE8E69F}.Debug|Any CPU.ActiveCfg = Debug
+		{C62B7813-F801-4ADD-80DD-9167FEE8E69F}.Release|Any CPU.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

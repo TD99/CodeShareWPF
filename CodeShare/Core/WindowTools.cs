@@ -25,11 +25,13 @@ namespace CodeShare.Core
         {
             Window window = new Window
             {
+                Top = -100,
+                Left = -100,
                 Width = 0,
                 Height = 0,
                 WindowStyle = WindowStyle.ToolWindow,
                 ShowInTaskbar = false,
-                Opacity = 0
+                ResizeMode = ResizeMode.NoResize
             };
             window.Show();
             sender.Owner = window;

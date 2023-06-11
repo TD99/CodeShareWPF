@@ -10,11 +10,13 @@ namespace CodeShare
         public MainWindow()
         {
             InitializeComponent();
+
+            DebugPos.Content = CodeShare.Properties.Settings.Default.ToolbarHorizontalOffset;
         }
 
         private void ToolbarSummonBtn_Click(object sender, RoutedEventArgs e)
         {
-            new ToolbarWindow().Show();
+            App.OpenToolbarWindow();
         }
     }
 }

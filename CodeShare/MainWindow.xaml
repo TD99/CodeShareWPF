@@ -18,6 +18,7 @@
                 VerticalAlignment="Top"
                 Content="Summon Toolbar Window"
                 Click="ToolbarSummonBtn_Click" />
+        <Label x:Name="DebugPos" />
         <Frame Source="MVVM/View/UserPage.xaml"
                Grid.Row="1"/>
     </Grid>
