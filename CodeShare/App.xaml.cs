@@ -14,7 +14,7 @@ namespace CodeShare
 {
     public partial class App : Application
     {
-        private static MainWindow _configWindow = new();
+        private static ConfigWindow _configWindow = new();
         private static ToolbarWindow _toolbarWindow = new();
         private readonly HotKey _toolbarHk = new("ToolbarHotKey", ModifierKeys.Control | ModifierKeys.Alt, Key.F);
         private TaskbarIcon? _notifyIcon;
@@ -29,11 +29,11 @@ namespace CodeShare
         {
             var isSuccessful = WindowTools.TryOpenWindow(App._configWindow);
             if (isSuccessful) return;
-            _configWindow = new MainWindow();
+            _configWindow = new ConfigWindow();
             _configWindow.Show();
         }
 
-        public static void OpenConfigWindow(MainWindow overrideWindow)
+        public static void OpenConfigWindow(ConfigWindow overrideWindow)
         {
             _configWindow.Close();
             _configWindow = overrideWindow;
