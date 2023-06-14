@@ -19,6 +19,12 @@
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
+        "Entry"
+        {
+        "MsmKey" = "8:_51BC564295A442B48F69122910855EED"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
     }
     "Configurations"
     {
@@ -69,12 +75,35 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+            }
         }
     }
     "Deployable"
     {
         "CustomAction"
         {
+            "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_33BD8C4F4A4A494F95BA2EF8B2D9D4E3"
+            {
+            "Name" = "8:MicrosoftEdgeWebview2Setup"
+            "Condition" = "8:"
+            "Object" = "8:_51BC564295A442B48F69122910855EED"
+            "FileType" = "3:2"
+            "InstallAction" = "3:1"
+            "Arguments" = "8:/Install"
+            "EntryPoint" = "8:"
+            "Sequence" = "3:1"
+            "Identifier" = "8:_DA8AA118_92AC_47F9_8796_3FB08EB03C2C"
+            "InstallerClass" = "11:FALSE"
+            "CustomActionData" = "8:"
+            "Run64Bit" = "11:TRUE"
+            }
         }
         "DefaultFeature"
         {
@@ -100,6 +129,26 @@
         }
         "File"
         {
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_51BC564295A442B48F69122910855EED"
+            {
+            "SourcePath" = "8:..\\CodeShare\\External\\MicrosoftEdgeWebview2Setup.exe"
+            "TargetName" = "8:MicrosoftEdgeWebview2Setup.exe"
+            "Tag" = "8:"
+            "Folder" = "8:_168428FB183B43FC9D61350EB8FEC34C"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
         }
         "FileType"
         {
@@ -692,7 +741,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_24CAB0ACD36C4CB7BA9C1E551146F30C"
             {
-            "SourcePath" = "8:..\\CodeShare\\obj\\Debug\\net7.0-windows\\apphost.exe"
+            "SourcePath" = "8:..\\CodeShare\\obj\\x64\\Debug\\net7.0-windows\\apphost.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_168428FB183B43FC9D61350EB8FEC34C"

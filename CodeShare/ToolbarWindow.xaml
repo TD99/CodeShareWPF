@@ -64,7 +64,7 @@
                             Click="SettingsBtn_Click"
                             Style="{StaticResource ToolbarButton}">
                         <Button.Content>
-                            <controls:Icon FontFamily="{StaticResource faSolid}"
+                            <controls:Icon FontFamily="{StaticResource FaSolid}"
                                            Unicode="f013"
                                            Identifier="gear" />
                         </Button.Content>
@@ -74,7 +74,7 @@
                             Click="QuitBtn_Click"
                             Style="{StaticResource ToolbarButton}">
                         <Button.Content>
-                            <controls:Icon FontFamily="{StaticResource faSolid}"
+                            <controls:Icon FontFamily="{StaticResource FaSolid}"
                                            Unicode="f78c"
                                            Identifier="minimize" />
                         </Button.Content>

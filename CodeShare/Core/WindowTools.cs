@@ -6,7 +6,7 @@ namespace CodeShare.Core
     {
         public static bool TryOpenWindow(Window window)
         {
-            bool is_sucessful = true;
+            var isSuccessful = true;
 
             try
             {
@@ -15,15 +15,15 @@ namespace CodeShare.Core
             }
             catch
             {
-                is_sucessful = false;
+                isSuccessful = false;
             }
 
-            return is_sucessful;
+            return isSuccessful;
         }
 
         public static void HideWindowFromAltTab(Window sender)
         {
-            Window window = new Window
+            var window = new Window
             {
                 Top = -100,
                 Left = -100,

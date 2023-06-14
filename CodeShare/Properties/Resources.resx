@@ -121,7 +121,7 @@
   <data name="codesh-64x64" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
-        wgAADsIBFShKgAAAB4JJREFUeF7tm9lTFEccx9e8pPKcPCRvqcpDXvIn5CmPebMqr4nh8GQXREXFCzVR
+        wQAADsEBuJFr7QAAB4JJREFUeF7tm9lTFEccx9e8pPKcPCRvqcpDXvIn5CmPebMqr4nh8GQXREXFCzVR
         ifEIJc6C3IgH3gIqCigeoIIcAgoqghzKJeFQ7qPT37HXmen97c4sooFdvlWfitn+dff0b/r4zY9qmzfF
         xMR89rtd+SnY4YwLtjsfBDuUoRCHk81l+DOOh9idtcF2JTUozLnY4Yj7XAzHF7FFoQ7nL7zBermDeUhX
         kENZbdkRv4Yd+pJXypUamffwGfwwOEL5XgyT1pLlzm/59GmkGvAH+PLoDwqP/1EM1yj1zfvx4N9jVwaD
@@ -155,5 +155,8 @@
         AIMPsh8OEcOlhUuFuFdHNTCfwbT3+OZl4VIh7tXhahnV2PxCmcSGt2RV/NdieNaFe3WhdiUKt6vUhsgO
         5iLKNP9vDWfX+6OOlM32H0ejDDENIoInAAAAAElFTkSuQmCC
 </value>
+  </data>
+  <data name="ProductName" xml:space="preserve">
+    <value>CodeShare</value>
   </data>
 </root>

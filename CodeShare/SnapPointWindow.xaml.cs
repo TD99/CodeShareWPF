@@ -17,8 +17,10 @@ namespace CodeShare
         public double AnimationDuration { get; private set; }
         public bool IsHoverAnimation { get; private set; }
 
+        #pragma warning disable SYSLIB1054
         [DllImport("user32.dll")]
-        static extern bool SetCursorPos(int X, int Y);
+        private static extern bool SetCursorPos(int x, int y);
+        #pragma warning restore SYSLIB1054
 
         public SnapPointWindow(Point position, double radius, Brush foregroundColor, bool fixCursor = false, bool isCenterPosition = true, bool isAnimation = false, double animationDuration = 0, bool isHoverAnimation = false)
         {
@@ -50,8 +52,8 @@ namespace CodeShare
         {
             if (FixCursor)
             {
-                Point center = new Point(Radius, Radius);
-                Point relativeToScreen = this.PointToScreen(center);
+                var center = new Point(Radius, Radius);
+                var relativeToScreen = this.PointToScreen(center);
                 SetCursorPos((int)relativeToScreen.X, (int)relativeToScreen.Y);
             }
 
@@ -71,17 +73,16 @@ namespace CodeShare
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            if (IsAnimation)
-            {
-                var animation = new DoubleAnimation
-                {
-                    From = 0,
-                    To = 1,
-                    Duration = new Duration(TimeSpan.FromSeconds(AnimationDuration))
-                };
+            if (!IsAnimation) return;
 
-                this.BeginAnimation(UIElement.OpacityProperty, animation);
-            }
+            var animation = new DoubleAnimation
+            {
+                From = 0,
+                To = 1,
+                Duration = new Duration(TimeSpan.FromSeconds(AnimationDuration))
+            };
+
+            this.BeginAnimation(UIElement.OpacityProperty, animation);
         }
 
         private void AnimateRadiusChange(double newRadius)

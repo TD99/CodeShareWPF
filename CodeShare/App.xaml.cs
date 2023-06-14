@@ -14,62 +14,95 @@ namespace CodeShare
 {
     public partial class App : Application
     {
-        public static MainWindow ConfigWindow = new MainWindow();
-        public static ToolbarWindow ToolbarWindow = new ToolbarWindow();
-        public static HotKey ToolbarHK = new HotKey("ToolbarHotKey", ModifierKeys.Control | ModifierKeys.Alt, Key.F);
-        private TaskbarIcon notifyIcon;
+        private static MainWindow _configWindow = new();
+        private static ToolbarWindow _toolbarWindow = new();
+        private readonly HotKey _toolbarHk = new("ToolbarHotKey", ModifierKeys.Control | ModifierKeys.Alt, Key.F);
+        private TaskbarIcon? _notifyIcon;
 
         public App()
         {
             AppDomain.CurrentDomain.ProcessExit += OnProcessExit;
         }
 
+        // Window Handlers 
         public static void OpenConfigWindow()
         {
-            bool is_successful = WindowTools.TryOpenWindow(App.ConfigWindow);
-            if (!is_successful)
-            {
-                ConfigWindow = new MainWindow();
-                ConfigWindow.Show();
-            }
+            var isSuccessful = WindowTools.TryOpenWindow(App._configWindow);
+            if (isSuccessful) return;
+            _configWindow = new MainWindow();
+            _configWindow.Show();
         }
 
         public static void OpenConfigWindow(MainWindow overrideWindow)
         {
-            ConfigWindow.Close();
-            ConfigWindow = overrideWindow;
-            ConfigWindow.Show();
+            _configWindow.Close();
+            _configWindow = overrideWindow;
+            _configWindow.Show();
         }
 
         public static void OpenToolbarWindow()
         {
-            bool is_successful = WindowTools.TryOpenWindow(App.ToolbarWindow);
-            if (!is_successful)
-            {
-                ToolbarWindow = new ToolbarWindow();
-                ToolbarWindow.Show();
-            }
+            var isSuccessful = WindowTools.TryOpenWindow(App._toolbarWindow);
+            if (isSuccessful) return;
+            _toolbarWindow = new ToolbarWindow();
+            _toolbarWindow.Show();
         }
 
         public static void OpenToolbarWindow(ToolbarWindow overrideWindow)
         {
-            ToolbarWindow.Close();
-            ToolbarWindow = overrideWindow;
-            ToolbarWindow.Show();
+            _toolbarWindow.Close();
+            _toolbarWindow = overrideWindow;
+            _toolbarWindow.Show();
         }
 
+        // App Events
         private void Application_Startup(object sender, StartupEventArgs e)
         {
-            // Create a new TaskbarIcon (tray icon) and set its icon
-            notifyIcon = new TaskbarIcon()
+            InitTaskbarIcon();
+        }
+
+        private void OnProcessExit(object? sender, EventArgs? e)
+        {
+            PrepareShutdown();
+        }
+
+        protected override void OnExit(ExitEventArgs e)
+        {
+            PrepareShutdown();
+            base.OnExit(e);
+        }
+
+        // Event based methods
+        private static void HandleToolbarHk(object? sender, HotkeyEventArgs? e)
+        {
+            var clipboardBackup = Clipboard.GetText();
+
+            Thread.Sleep(500);
+            System.Windows.Forms.SendKeys.SendWait("^c");
+            var selectedText = Clipboard.GetText();
+            OpenToolbarWindow(new ToolbarWindow(selectedText));
+
+            Clipboard.SetText(clipboardBackup);
+        }
+
+        public void PrepareShutdown()
+        {
+            HotkeyManager.Current.Remove(_toolbarHk.Name);
+            _notifyIcon?.Dispose();
+        }
+
+        private void InitTaskbarIcon()
+        {
+            // Create tray element and set icon
+            _notifyIcon = new TaskbarIcon()
             {
-                ToolTipText = "CodeShare",
+                ToolTipText = CodeShare.Properties.Resources.ProductName,
                 Icon = Icon.FromHandle(CodeShare.Properties.Resources.codesh_64x64.GetHicon()),
                 MenuActivation = PopupActivationMode.RightClick,
                 LeftClickCommand = new RelayCommand(App.OpenToolbarWindow)
             };
 
-            // Create a context menu for the tray icon
+            // Context menu
             var contextMenu = new ContextMenu();
 
             var openToolbarItem = new MenuItem { Header = "Open Toolbar" };
@@ -84,41 +117,10 @@ namespace CodeShare
             exitMenuItem.Click += (s, e) => Shutdown();
             contextMenu.Items.Add(exitMenuItem);
 
-            // Assign the context menu to the tray icon
-            notifyIcon.ContextMenu = contextMenu;
-
-            HotkeyManager.Current.AddOrReplace(ToolbarHK.Name, ToolbarHK.Key, ToolbarHK.Modifiers, HandleToolbarHK);
-
-            ToolbarWindow.Show();
-        }
-
-        private void HandleToolbarHK(object sender, HotkeyEventArgs e)
-        {
-            var clipboardBackup = Clipboard.GetText();
-
-            Thread.Sleep(100);
-            System.Windows.Forms.SendKeys.SendWait("^c");
-            var selectedText = Clipboard.GetText();
-            OpenToolbarWindow(new ToolbarWindow(selectedText));
-
-            Clipboard.SetText(clipboardBackup);
-        }
-
-        private void OnProcessExit(object sender, EventArgs e)
-        {
-            PrepareShutdown();
-        }
-
-        protected override void OnExit(ExitEventArgs e)
-        {
-            PrepareShutdown();
-            base.OnExit(e);
-        }
-
-        public void PrepareShutdown()
-        {
-            HotkeyManager.Current.Remove(ToolbarHK.Name);
-            notifyIcon.Dispose();
+            // Assign context menu to tray icon
+            _notifyIcon.ContextMenu = contextMenu;
+            HotkeyManager.Current.AddOrReplace(_toolbarHk.Name, _toolbarHk.Key, _toolbarHk.Modifiers, HandleToolbarHk);
+            _toolbarWindow.Show();
         }
     }
 }

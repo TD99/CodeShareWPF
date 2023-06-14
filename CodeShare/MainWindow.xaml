@@ -14,11 +14,11 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <Button x:Name="ToolbarSummonBtn"
+        <Button Grid.Row="0" x:Name="ToolbarSummonBtn"
                 VerticalAlignment="Top"
                 Content="Summon Toolbar Window"
                 Click="ToolbarSummonBtn_Click" />
-        <Label x:Name="DebugPos" />
+        <Label Grid.Row="0" x:Name="DebugPos" />
         <Frame Source="MVVM/View/SettingsPage.xaml"
                Grid.Row="1"/>
     </Grid>

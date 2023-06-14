@@ -7,7 +7,7 @@ namespace CodeShare.Controls
     public class Icon : Label
     {
         public static readonly DependencyProperty UnicodeProperty = DependencyProperty.Register(
-            "Unicode", typeof(string), typeof(Icon), new PropertyMetadata(default(string)));
+            nameof(Unicode), typeof(string), typeof(Icon), new PropertyMetadata(default(string)));
 
         public string Unicode
         {

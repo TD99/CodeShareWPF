@@ -1,6 +1,4 @@
-﻿using NHotkey;
-using System;
-using System.Windows.Input;
+﻿using System.Windows.Input;
 
 namespace CodeShare.MVVM.Model
 {

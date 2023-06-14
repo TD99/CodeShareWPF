@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using CodeShare.Core;
@@ -10,19 +9,16 @@ using Microsoft.Win32;
 
 namespace CodeShare
 {
-    /// <summary>
-    /// Interaction logic for ToolbarWindow.xaml
-    /// </summary>
     public partial class ToolbarWindow : Window
     {
-        private bool IsDragging = false;
-        private Point MouseOffset;
-        private Point DefaultCenter;
+        private bool _isDragging = false;
+        private Point _mouseOffset;
+        private Point _defaultCenter;
 
         public ToolbarWindow(string? selected = null)
         {
             InitializeComponent();
-            this.DefaultCenter = new Point((SystemParameters.WorkArea.Width - this.ActualWidth) / 2, 20);
+            this._defaultCenter = new Point((SystemParameters.WorkArea.Width - this.ActualWidth) / 2, 20);
             WindowTools.HideWindowFromAltTab(this);
             SystemEvents.DisplaySettingsChanged += OnDisplaySettingsChanged;
             this.LocationChanged += MainWindow_LocationChanged;
@@ -33,7 +29,7 @@ namespace CodeShare
             }
         }
 
-        private void OnDisplaySettingsChanged(object sender, EventArgs e)
+        private void OnDisplaySettingsChanged(object? sender, EventArgs? e)
         {
             RepositionWindow();
         }
@@ -52,15 +48,15 @@ namespace CodeShare
 
         private void RepositionWindow()
         {
-            double leftValue = (SystemParameters.WorkArea.Width * CodeShare.Properties.Settings.Default.ToolbarHorizontalOffset);
-            double min = 20;
-            double max = SystemParameters.WorkArea.Width - this.ActualWidth - 20;
+            var leftValue = (SystemParameters.WorkArea.Width * CodeShare.Properties.Settings.Default.ToolbarHorizontalOffset);
+            var min = 20;
+            var max = SystemParameters.WorkArea.Width - this.ActualWidth - 20;
 
             Left = (leftValue < min) ? 20 : (leftValue > max) ? max : leftValue;
             Top = 20;
         }
 
-        private void MainWindow_LocationChanged(object sender, EventArgs e)
+        private void MainWindow_LocationChanged(object? sender, EventArgs? e)
         {
             this.Top = 20;
         }
@@ -104,51 +100,48 @@ namespace CodeShare
 
         private void MoveLine_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            if (e.ChangedButton == MouseButton.Left)
-            {
-                var element = (UIElement)sender;
-                element.CaptureMouse();
+            if (e.ChangedButton != MouseButton.Left) return;
 
-                IsDragging = true;
-                MouseOffset = e.GetPosition(this);
-            }
+            var element = (UIElement)sender;
+            element.CaptureMouse();
+
+            _isDragging = true;
+            _mouseOffset = e.GetPosition(this);
         }
 
         private void MoveLine_MouseUp(object sender, MouseButtonEventArgs e)
         {
-            if (e.ChangedButton == MouseButton.Left)
-            {
-                var element = (UIElement)sender;
-                element.ReleaseMouseCapture();
-                IsDragging = false;
+            if (e.ChangedButton != MouseButton.Left) return;
 
-                // Save the horizontal position of the window as a relative factor
-                double relativeFactor = Left / SystemParameters.WorkArea.Width;
-                relativeFactor = Math.Max(0, Math.Min(1, relativeFactor));
-                Settings.Default.ToolbarHorizontalOffset = relativeFactor;
-                Settings.Default.Save();
-                RepositionWindow();
-            }
+            var element = (UIElement)sender;
+            element.ReleaseMouseCapture();
+            _isDragging = false;
+
+            // Save the horizontal position of the window as a relative factor
+            var relativeFactor = Left / SystemParameters.WorkArea.Width;
+            relativeFactor = Math.Max(0, Math.Min(1, relativeFactor));
+            Settings.Default.ToolbarHorizontalOffset = relativeFactor;
+            Settings.Default.Save();
+            RepositionWindow();
         }
 
         private void Window_MouseMove(object sender, MouseEventArgs e)
         {
-            if (IsDragging)
-            {
-                Point currentMousePosition = e.GetPosition(null);
-                Vector offset = currentMousePosition - MouseOffset;
+            if (!_isDragging) return;
 
-                double newLeft = this.Left + offset.X;
-                if (newLeft > (DefaultCenter.X - this.ActualWidth / 2) - 30 && newLeft < (DefaultCenter.X - this.ActualWidth / 2) + 30)
-                {
-                    this.Left = DefaultCenter.X - this.ActualWidth / 2;
-                }
-                else
-                {
-                    double minLeft = 20;
-                    double maxLeft = SystemParameters.WorkArea.Width - this.ActualWidth - 20;
-                    this.Left = Math.Max(minLeft, Math.Min(maxLeft, newLeft));
-                }
+            var currentMousePosition = e.GetPosition(null);
+            var offset = currentMousePosition - _mouseOffset;
+
+            var newLeft = this.Left + offset.X;
+            if (newLeft > (_defaultCenter.X - this.ActualWidth / 2) - 30 && newLeft < (_defaultCenter.X - this.ActualWidth / 2) + 30)
+            {
+                this.Left = _defaultCenter.X - this.ActualWidth / 2;
+            }
+            else
+            {
+                var minLeft = 20;
+                var maxLeft = SystemParameters.WorkArea.Width - this.ActualWidth - 20;
+                this.Left = Math.Max(minLeft, Math.Min(maxLeft, newLeft));
             }
         }
 
@@ -168,11 +161,11 @@ namespace CodeShare
 
             if (e.Data.GetDataPresent(DataFormats.FileDrop))
             {
-
+                // ...
             }
             else if (e.Data.GetDataPresent(DataFormats.Text))
             {
-                string text = (string)e.Data.GetData(DataFormats.Text);
+                var text = (string?)e.Data.GetData(DataFormats.Text);
                 App.OpenToolbarWindow(new ToolbarWindow(text));
             }
         }
