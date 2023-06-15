@@ -9,6 +9,7 @@
       Title="UserPage">
 
     <Grid>
-        <Button Content="Hello" />
+        <Frame x:Name="UserFrame"
+               Navigated="UserFrame_Navigated" />
     </Grid>
 </Page>
