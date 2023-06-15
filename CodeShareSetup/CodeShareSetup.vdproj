@@ -82,6 +82,14 @@
             "PrerequisitesLocation" = "2:1"
             "Url" = "8:"
             "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.7.2"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4.7.2 (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.7.2"
+                    }
+                }
             }
         }
     }
@@ -206,7 +214,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:CodeShare"
         "ProductCode" = "8:{666FC6FA-4994-45E0-951F-F87B714FABE0}"
-        "PackageCode" = "8:{9A2B0423-2AFA-44AD-873D-8C89CE439168}"
+        "PackageCode" = "8:{5F8D5DB9-AF37-4C47-8A43-EC30166FD1BA}"
         "UpgradeCode" = "8:{E3542DA4-0D50-4FC1-8869-C044E959F5D7}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
@@ -671,7 +679,7 @@
                             "ContextData" = "8:1;True=1;False=0"
                             "Attributes" = "3:0"
                             "Setting" = "3:0"
-                            "Value" = "3:0"
+                            "Value" = "3:1"
                             "DefaultValue" = "3:1"
                             "UsePlugInResources" = "11:TRUE"
                             }

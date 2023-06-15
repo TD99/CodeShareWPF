@@ -20,7 +20,8 @@
         PreviewDragEnter="Window_PreviewDragEnter"
         PreviewDragLeave="Window_PreviewDragLeave"
         Drop="Window_Drop">
-    <Border CornerRadius="10"
+    <Border x:Name="ToolbarBorder"
+            CornerRadius="10"
             BorderBrush="#6654e8"
             BorderThickness="1.5"
             Background="#1f1f1f"

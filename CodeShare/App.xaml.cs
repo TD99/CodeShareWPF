@@ -119,7 +119,15 @@ namespace CodeShare
 
             // Assign context menu to tray icon
             _notifyIcon.ContextMenu = contextMenu;
-            HotkeyManager.Current.AddOrReplace(_toolbarHk.Name, _toolbarHk.Key, _toolbarHk.Modifiers, HandleToolbarHk);
+            try
+            {
+                HotkeyManager.Current.AddOrReplace(_toolbarHk.Name, _toolbarHk.Key, _toolbarHk.Modifiers, HandleToolbarHk);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("The HotKey can't get registered!");
+            }
+
             _toolbarWindow.Show();
         }
     }
