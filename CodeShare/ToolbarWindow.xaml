@@ -3,34 +3,110 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:controls="clr-namespace:CodeShare.Controls"
         xmlns:local="clr-namespace:CodeShare"
         mc:Ignorable="d"
         Title="ToolbarWindow"
-        Height="60"
+        Height="55"
         Width="400"
         WindowStyle="None"
-        
+        Topmost="True"
         AllowsTransparency="True"
         Background="Transparent"
-        ResizeMode="NoResize">
+        ResizeMode="NoResize"
+        ShowInTaskbar="False"
+        MouseMove="Window_MouseMove"
+        AllowDrop="True"
+        PreviewDragEnter="Window_PreviewDragEnter"
+        PreviewDragLeave="Window_PreviewDragLeave"
+        Drop="Window_Drop">
     <Border CornerRadius="10"
             BorderBrush="#6654e8"
-            BorderThickness="1"
+            BorderThickness="1.5"
             Background="#1f1f1f"
-            Padding="15">
+            Padding="10">
         <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="Auto" />
-            </Grid.ColumnDefinitions>
-            <Button Grid.Column="0" />
-            <Rectangle Width="1"
-                       Margin="5, 0"
-                       Fill="White"
-                       Grid.Column="1"/>
-            <Button Content="Hello"
-                    Grid.Column="2" />
+            <Border x:Name="DragNDropBorder"
+                    BorderThickness="3"
+                    BorderBrush="White"
+                    CornerRadius="10">
+                <Rectangle Fill="#88FFFFFF" />
+
+                <Border.Style>
+                    <Style TargetType="Border">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding ElementName=ToolbarButtonGrid, Path=Visibility}" Value="Visible">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Border.Style>
+            </Border>
+            
+            <Grid x:Name="ToolbarButtonGrid">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                
+                <Button x:Name="DbgBtn"
+                        Grid.Column="0"
+                        Style="{StaticResource ToolbarButton}" />
+                <Rectangle Width="0.5"
+                           Margin="5, 0"
+                           Fill="#5b5970"
+                           Grid.Column="1"/>
+
+                <StackPanel Orientation="Horizontal"
+                            Grid.Column="2">
+                    <Button x:Name="SettingsBtn"
+                            Click="SettingsBtn_Click"
+                            Style="{StaticResource ToolbarButton}">
+                        <Button.Content>
+                            <controls:Icon FontFamily="{StaticResource FaSolid}"
+                                           Unicode="f013"
+                                           Identifier="gear" />
+                        </Button.Content>
+                    </Button>
+
+                    <Button x:Name="QuitBtn"
+                            Click="QuitBtn_Click"
+                            Style="{StaticResource ToolbarButton}">
+                        <Button.Content>
+                            <controls:Icon FontFamily="{StaticResource FaSolid}"
+                                           Unicode="f78c"
+                                           Identifier="minimize" />
+                        </Button.Content>
+                    </Button>
+                </StackPanel>
+            </Grid>
+
+            <Line x:Name="MoveLine"
+                  X1="0"
+                  Y1="0"
+                  X2="50"
+                  Y2="0"
+                  Stroke="#fff"
+                  StrokeThickness="3"
+                  StrokeStartLineCap="Round"
+                  StrokeEndLineCap="Round"
+                  HorizontalAlignment="Center"
+                  Margin="0, 0, 0, 8.5"
+                  MouseEnter="MoveLine_MouseEnter"
+                  MouseLeave="MoveLine_MouseLeave"
+                  MouseDown="MoveLine_MouseDown"
+                  MouseUp="MoveLine_MouseUp">
+                <Line.Style>
+                    <Style TargetType="Line">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding ElementName=DragNDropBorder, Path=Visibility}" Value="Visible">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Line.Style>
+            </Line>
         </Grid>
     </Border>
 </Window>

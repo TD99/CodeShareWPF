@@ -3,9 +3,12 @@ using System.Windows.Navigation;
 
 namespace CodeShare.MVVM.View
 {
+<<<<<<< HEAD
     /// <summary>
     /// Interaktionslogik für UserPage.xaml
     /// </summary>
+=======
+>>>>>>> ba86ed36611fa8e57bd6b493373a041dfc305473
     public partial class UserPage : Page
     {
         public UserPage()
