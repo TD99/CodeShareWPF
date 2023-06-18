@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media.Animation;
@@ -157,17 +158,26 @@ namespace CodeShare
 
         private void Window_Drop(object sender, DragEventArgs e)
         {
+            e.Effects = DragDropEffects.Copy;
             ToolbarButtonGrid.Visibility = Visibility.Visible;
+
+            string? text = null;
 
             if (e.Data.GetDataPresent(DataFormats.FileDrop))
             {
-                // ...
+                string[]? files = (string[]?)e.Data.GetData(DataFormats.FileDrop);
+                string file = files[0];
+
+                if (!File.Exists(file)) return;
+
+                text = File.ReadAllText(file);
             }
             else if (e.Data.GetDataPresent(DataFormats.Text))
             {
-                var text = (string?)e.Data.GetData(DataFormats.Text);
-                App.OpenToolbarWindow(new ToolbarWindow(text));
+                text = (string?)e.Data.GetData(DataFormats.Text);
             }
+
+            App.OpenToolbarWindow(new ToolbarWindow(text));
         }
 
         private void Window_PreviewDragLeave(object sender, DragEventArgs e)

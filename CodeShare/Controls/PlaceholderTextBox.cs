@@ -21,6 +21,10 @@ namespace CodeShare.Controls
             base.OnApplyTemplate();
 
             _placeholderTextBlock = GetTemplateChild("PART_PlaceholderTextBlock") as TextBlock;
+            if (_placeholderTextBlock != null)
+            {
+                _placeholderTextBlock.Margin = new Thickness(0);
+            }
             UpdatePlaceholderVisibility();
         }
 

@@ -14,8 +14,8 @@ namespace CodeShare
 {
     public partial class App : Application
     {
-        private static ConfigWindow _configWindow = new();
-        private static ToolbarWindow _toolbarWindow = new();
+        public static ConfigWindow ConfigWindow = new();
+        public static ToolbarWindow ToolbarWindow = new();
         private readonly HotKey _toolbarHk = new("ToolbarHotKey", ModifierKeys.Control | ModifierKeys.Alt, Key.F);
         private TaskbarIcon? _notifyIcon;
 
@@ -27,37 +27,47 @@ namespace CodeShare
         // Window Handlers 
         public static void OpenConfigWindow()
         {
-            var isSuccessful = WindowTools.TryOpenWindow(App._configWindow);
+            var isSuccessful = WindowTools.TryOpenWindow(App.ConfigWindow);
             if (isSuccessful) return;
-            _configWindow = new ConfigWindow();
-            _configWindow.Show();
+            ConfigWindow = new ConfigWindow();
+            ConfigWindow.Show();
         }
 
         public static void OpenConfigWindow(ConfigWindow overrideWindow)
         {
-            _configWindow.Close();
-            _configWindow = overrideWindow;
-            _configWindow.Show();
+            ConfigWindow.Close();
+            ConfigWindow = overrideWindow;
+            ConfigWindow.Show();
         }
 
         public static void OpenToolbarWindow()
         {
-            var isSuccessful = WindowTools.TryOpenWindow(App._toolbarWindow);
+            var isSuccessful = WindowTools.TryOpenWindow(App.ToolbarWindow);
             if (isSuccessful) return;
-            _toolbarWindow = new ToolbarWindow();
-            _toolbarWindow.Show();
+            ToolbarWindow = new ToolbarWindow();
+            ToolbarWindow.Show();
         }
 
         public static void OpenToolbarWindow(ToolbarWindow overrideWindow)
         {
-            _toolbarWindow.Close();
-            _toolbarWindow = overrideWindow;
-            _toolbarWindow.Show();
+            ToolbarWindow.Close();
+            ToolbarWindow = overrideWindow;
+            ToolbarWindow.Show();
         }
 
         // App Events
         private void Application_Startup(object sender, StartupEventArgs e)
         {
+            foreach (var arg in e.Args)
+            {
+                switch (arg)
+                {
+                    case "/Install":
+                        new InstallWindow().Show();
+                        return;
+                }
+            }
+
             InitTaskbarIcon();
         }
 
@@ -123,12 +133,12 @@ namespace CodeShare
             {
                 HotkeyManager.Current.AddOrReplace(_toolbarHk.Name, _toolbarHk.Key, _toolbarHk.Modifiers, HandleToolbarHk);
             }
-            catch (Exception ex)
+            catch
             {
                 MessageBox.Show("The HotKey can't get registered!");
             }
 
-            _toolbarWindow.Show();
+            ToolbarWindow.Show();
         }
     }
 }

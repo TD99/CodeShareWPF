@@ -1,19 +1,16 @@
 ﻿using System.Windows;
+using CodeShare.MVVM.View;
 
 namespace CodeShare
 {
     public partial class ConfigWindow : Window
     {
+        public UserPage UserPage = new();
+
         public ConfigWindow()
         {
             InitializeComponent();
-
-            DebugPos.Content = CodeShare.Properties.Settings.Default.ToolbarHorizontalOffset;
-        }
-
-        private void ToolbarSummonBtn_Click(object sender, RoutedEventArgs e)
-        {
-            App.OpenToolbarWindow();
+            UserPageFrame.Navigate(UserPage);
         }
     }
 }

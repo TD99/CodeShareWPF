@@ -8,6 +8,8 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Style/ToolbarButton.xaml" />
+                <ResourceDictionary Source="Style/ModernButton.xaml" />
+                <ResourceDictionary Source="Style/ErrorToolTip.xaml" />
                 <ResourceDictionary Source="Style/Global.xaml" />
             </ResourceDictionary.MergedDictionaries>
             

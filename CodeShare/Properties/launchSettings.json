@@ -1,0 +1,11 @@
+{
+  "profiles": {
+    "CodeShare": {
+      "commandName": "Project"
+    },
+    "CodeShare /Install": {
+      "commandName": "Project",
+      "commandLineArgs": "/Install"
+    }
+  }
+}

@@ -1,24 +1,60 @@
 ﻿<Page x:Class="CodeShare.MVVM.View.Login"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"  
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"  
-        Title="Login" Height="350" Width="525">
-    <Grid Background="White">
-        <TextBlock Height="23" HorizontalAlignment="Left" Margin="10,10,0,0" Name="LoginHeading" Text="Login:" VerticalAlignment="Top" FontSize="17" FontStretch="ExtraCondensed"/>
-        <TextBlock Height="50" HorizontalAlignment="Left" Margin="24,48,0,0" Name="textBlockHeading" VerticalAlignment="Top" FontSize="12" FontStyle="Italic" Padding="5">  
-            Note: Please login here to view the features of this site. If you are new on this site then <LineBreak /><!--line break-->  
-            please click on  
-           <!--textblock as a Hyperlink.-->  
-            <TextBlock>  
-                 <Hyperlink Click="buttonRegister_Click" FontSize="14" FontStyle="Normal">Register</Hyperlink>  
-            </TextBlock>  
-            <!--end textblock as a hyperlink-->  
-            button  
-        </TextBlock>
-        <TextBlock Height="23" HorizontalAlignment="Left" Margin="66,120,0,0" Name="textBlock1" Text="Email" VerticalAlignment="Top" Width="67" />
-        <TextBlock Height="23" HorizontalAlignment="Left" Margin="58,168,0,0" Name="textBlock2" Text="Password" VerticalAlignment="Top" Width="77" />
-        <TextBox Height="23" HorizontalAlignment="Left" Margin="118,115,0,0" Name="textBoxEmail" VerticalAlignment="Top" Width="247" />
-        <PasswordBox Height="23" HorizontalAlignment="Left" Margin="118,168,0,0" Name="passwordBox1" VerticalAlignment="Top" Width="247" />
-        <Button Content="Login" Height="23" HorizontalAlignment="Left" Margin="118,211,0,0" Name="button1" VerticalAlignment="Top" Width="104" />
-        <TextBlock Height="23" HorizontalAlignment="Left" x:Name ="errormessage" VerticalAlignment="Top" Width="247" Margin="118,253,0,0"  OpacityMask="Crimson" Foreground="#FFE5572C"  />
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:controls="clr-namespace:CodeShare.Controls"
+      Title="Login">
+    <Grid>
+        <Border Padding="15"
+                CornerRadius="10"
+                VerticalAlignment="Center"
+                HorizontalAlignment="Center"
+                Width="300">
+            <Border.Background>
+                <LinearGradientBrush StartPoint="0,0"
+                                     EndPoint="1,1">
+                    <GradientStop Color="#EEFFFFFF" Offset="0.0" />
+                    <GradientStop Color="#FFFFFFFF" Offset="1.0" />
+                </LinearGradientBrush>
+            </Border.Background>
+
+            <ScrollViewer VerticalScrollBarVisibility="Auto"
+                          HorizontalScrollBarVisibility="Disabled">
+                <StackPanel>
+                    <TextBlock x:Name="TextBlockHeading"
+                               Text="Login"
+                               FontSize="25"
+                               FontWeight="Regular"
+                               FontStretch="ExtraCondensed" />
+                    <controls:FormInput x:Name="InputEmail"
+                                        Caption="E-Mail"
+                                        Hint="max.mustermann@gmail.com"
+                                        IsRequired="True"
+                                        Margin="0 10 0 0" />
+                    <controls:FormInput x:Name="InputPassword"
+                                        Caption="Password"
+                                        RequirementCaptionColor="DarkRed"
+                                        Hint="SecretPassword123"
+                                        IsPassword="True"
+                                        IsRequired="True"
+                                        Margin="0 10 0 0" />
+                    <Button x:Name="Submit"
+                            Content="Submit"
+                            HorizontalAlignment="Stretch"
+                            Padding="10"
+                            Margin="0 10 0 0"
+                            Style="{StaticResource ModernButton}"
+                            Click="Submit_OnClick" />
+                    <StackPanel Orientation="Horizontal"
+                                Margin="0 10 0 0">
+                        <TextBlock Text="Don't have an account? " />
+                        <TextBlock x:Name="RegisterBtn"
+                                   Text="Register"
+                                   TextDecorations="Underline"
+                                   Cursor="Hand"
+                                   MouseDown="RegisterBtn_OnMouseDown" />
+                    </StackPanel>
+                </StackPanel>
+            </ScrollViewer>
+        </Border>
     </Grid>
 </Page>

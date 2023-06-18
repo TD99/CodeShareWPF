@@ -1,0 +1,73 @@
+﻿<Window x:Class="CodeShare.InstallWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:controls="clr-namespace:CodeShare.Controls"
+        xmlns:local="clr-namespace:CodeShare"
+        mc:Ignorable="d"
+        Title="InstallWindow"
+        Height="223"
+        Width="396"
+        WindowStyle="None"
+        ResizeMode="NoResize"
+        AllowsTransparency="True"
+        Background="Transparent"
+        WindowStartupLocation="CenterScreen"
+        ContentRendered="InstallWindow_OnContentRendered">
+    <Border Background="#EE6654e8" Padding="5" CornerRadius="10">
+        <Grid>
+            <Button Content="CodeShare"
+                    Background="#55000000"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    Style="{StaticResource ModernButton}" />
+            <StackPanel Orientation="Horizontal"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Top">
+                <Button x:Name="MinimizeBtn"
+                        Background="#55000000"
+                        Style="{StaticResource ModernButton}"
+                        Click="MinimizeBtn_OnClick">
+                    <Button.Content>
+                        <controls:Icon FontFamily="{StaticResource FaSolid}"
+                                       Unicode="f068"
+                                       Identifier="minus" />
+                    </Button.Content>
+                </Button>
+
+                <Button x:Name="QuitBtn"
+                        Background="#55000000"
+                        Style="{StaticResource ModernButton}"
+                        Margin="5 0 0 0"
+                        Click="QuitBtn_OnClick">
+                    <Button.Content>
+                        <controls:Icon FontFamily="{StaticResource FaSolid}"
+                                       Unicode="f00d"
+                                       Identifier="xmark" />
+                    </Button.Content>
+                </Button>
+            </StackPanel>
+
+            <StackPanel Orientation="Vertical"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Center"
+                        Margin="50">
+
+                <Image Source="Assets/Images/icon.png"
+                       VerticalAlignment="Top"
+                       Width="64"
+                       Height="64">
+                    <Image.Effect>
+                        <DropShadowEffect Direction="255" Color="Gray" ShadowDepth="2" BlurRadius="10"></DropShadowEffect>
+                    </Image.Effect>
+                </Image>
+                <TextBlock Text="Installieren..."
+                           Foreground="White"
+                           FontSize="15"
+                           FontWeight="DemiBold"
+                           Margin="0 15 0 0" />
+            </StackPanel>
+        </Grid>
+    </Border>
+</Window>

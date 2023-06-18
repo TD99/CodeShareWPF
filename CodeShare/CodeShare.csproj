@@ -52,6 +52,9 @@
   </ItemGroup>
 	
   <ItemGroup>
+    <Content Include="Assets\Images\icon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="CodeShare.ico" />
   </ItemGroup>
 	
@@ -93,5 +96,16 @@
 	<Content Include="Plugins\**">
 	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	</Content>
+  </ItemGroup>
+	
+  <ItemGroup>
+    <None Remove="Assets\Images\background1.png" />
+    <None Remove="Assets\Images\icon.png" />
+  </ItemGroup>
+	
+  <ItemGroup>
+    <Content Include="Assets\Images\background1.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 </Project>

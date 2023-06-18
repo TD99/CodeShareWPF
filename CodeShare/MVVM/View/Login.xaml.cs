@@ -1,5 +1,9 @@
-﻿using System.Windows;
+﻿using CodeShare.MVVM.Model;
+using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
+using System.Windows.Input;
+using static System.Text.RegularExpressions.Regex;
 
 namespace CodeShare.MVVM.View
 {
@@ -8,11 +12,12 @@ namespace CodeShare.MVVM.View
     /// </summary>
     public partial class Login : Page
     {
+        private const string EmptyMessage = "'{0}' is a required field. It can't be empty!";
+
         public Login()
         {
             InitializeComponent();
         }
-        Register register = new Register();
         /*private void button1_Click(object sender, RoutedEventArgs e)
         {
             if (textBoxEmail.Text.Length == 0)
@@ -49,9 +54,49 @@ namespace CodeShare.MVVM.View
                 con.Close();
             }
         }*/
-        private void buttonRegister_Click(object sender, RoutedEventArgs e)
+
+        private void Submit_OnClick(object sender, RoutedEventArgs e)
         {
-            this.NavigationService.Navigate(new Register());
+            try
+            {
+                Validate();
+            }
+            catch (ControlException _)
+            {
+                var oldToolTop = _.Control.ToolTip;
+
+                var newToolTip = new ToolTip
+                {
+                    Content = _.Message,
+                    IsOpen = true,
+                    StaysOpen = false,
+                    Placement = PlacementMode.Bottom,
+                    PlacementTarget = Submit,
+                    Style = (Style)FindResource("ErrorToolTip")
+                };
+                newToolTip.Closed += (o, a) =>
+                {
+                    _.Control.ToolTip = oldToolTop;
+                };
+
+                _.Control.ToolTip = newToolTip;
+            }
+        }
+
+        private void Validate()
+        {
+            // E-Mail
+            if (string.IsNullOrWhiteSpace(InputEmail.Text))
+                throw new ControlException(InputEmail, string.Format(EmptyMessage, InputEmail.Caption));
+
+            // Password
+            if (string.IsNullOrWhiteSpace(InputPassword.Password))
+                throw new ControlException(InputPassword, string.Format(EmptyMessage, InputPassword.Caption));
+        }
+
+        private void RegisterBtn_OnMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            this.NavigationService?.Navigate(new Register());
         }
     }
 }

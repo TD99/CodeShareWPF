@@ -7,25 +7,27 @@
         mc:Ignorable="d"
         Title="ConfigWindow"
         WindowStartupLocation="CenterScreen"
-        Height="450"
-        Width="800">
+        Height="550"
+        Width="850">
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
-        <Button Grid.Row="0" x:Name="ToolbarSummonBtn"
-                VerticalAlignment="Top"
-                Content="Summon Toolbar Window"
-                Click="ToolbarSummonBtn_Click" />
-        <StackPanel Grid.Row="0" HorizontalAlignment="Left" Orientation="Horizontal">
-            <Label>RelPosToolbar: </Label>
-            <Label x:Name="DebugPos" />
-        </StackPanel>
-        <Frame Source="MVVM/View/SettingsPage.xaml"
-               Grid.Row="1"/>
-        <Frame Source="MVVM/View/CodePage.xaml"
-               Grid.Row="2"/>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.Background>
+            <ImageBrush ImageSource="/Assets/Images/background1.png"
+                        Stretch="UniformToFill" />
+        </Grid.Background>
+
+        <Border Background="White"
+                VerticalAlignment="Stretch"
+                HorizontalAlignment="Left"
+                Width="150"
+                Grid.Column="0">
+            <TextBlock Text="\{Navigation.Service}\" />
+        </Border>
+        <Frame x:Name="UserPageFrame"
+               NavigationUIVisibility="Hidden"
+               Grid.Column="1" />
     </Grid>
 </Window>

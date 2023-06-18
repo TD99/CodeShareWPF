@@ -54,6 +54,7 @@
                 <Button x:Name="DbgBtn"
                         Grid.Column="0"
                         Style="{StaticResource ToolbarButton}" />
+
                 <Rectangle Width="0.5"
                            Margin="5, 0"
                            Fill="#5b5970"
@@ -82,6 +83,8 @@
                     </Button>
                 </StackPanel>
             </Grid>
+
+            
 
             <Line x:Name="MoveLine"
                   X1="0"
