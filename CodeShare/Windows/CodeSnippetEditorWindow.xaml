@@ -1,0 +1,89 @@
+﻿<Window x:Class="CodeShare.Windows.CodeSnippetEditorWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:wv2="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf"
+        xmlns:controls="clr-namespace:CodeShare.Controls"
+        xmlns:local="clr-namespace:CodeShare.Windows"
+        mc:Ignorable="d"
+        Title="Code Editor"
+        Background="#343b48"
+        WindowStartupLocation="CenterScreen"
+        Closing="CodeSnippetEditorWindow_OnClosing"
+        Height="550"
+        Width="850">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Grid x:Name="DummyFocus"
+                         Focusable="True"
+                         Visibility="Collapsed" />
+
+        <Border Grid.Row="0">
+            <Border.Background>
+                <ImageBrush ImageSource="/Assets/Images/background1.png"
+                            Stretch="UniformToFill"
+                            Opacity="0.5" />
+            </Border.Background>
+
+            <Grid Margin="10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <controls:ExtendedWrapPanel x:Name="InputPanel"
+                                            Orientation="Horizontal"
+                                            Gap="10"
+                                            Grid.Column="0">
+                    <controls:FormInput x:Name="InputTitle"
+                                        Caption="Title"
+                                        Hint="My Snippet"
+                                        TextColor="White"
+                                        AccentColor="#cccccc"
+                                        AccentBlurColor="#999999"
+                                        AccentHoverColor="White"
+                                        BackgroundColor="#55000000"
+                                        MinWidth="100" />
+                    <controls:FormInput x:Name="InputLanguage"
+                                        Caption="Language"
+                                        Hint="JavaScript"
+                                        TextColor="White"
+                                        AccentColor="#cccccc"
+                                        AccentBlurColor="#999999"
+                                        AccentHoverColor="White"
+                                        AccentContrastColor="#55FFFFFF"
+                                        BackgroundColor="#55000000"
+                                        MinWidth="100"
+                                        IsComboBox="True"
+                                        ComboBoxDisplayMemberPath="DisplayName"
+                                        ComboBoxSelectedValuePath="Id"
+                                        ComboBoxSelectionChangedEvenHandler="InputLanguage_OnComboBoxSelectionChangedEvenHandler" />
+                </controls:ExtendedWrapPanel>
+                <Border BorderThickness="1"
+                        BorderBrush="#999999"
+                        CornerRadius="5"
+                        Grid.Column="1">
+                    <Button Style="{StaticResource ModernButton}"
+                            Background="#55000000"
+                            IsTabStop="False">
+                        <Button.Content>
+                            <controls:Icon FontFamily="{StaticResource FaSolid}"
+                                           Unicode="e09a"
+                                           Identifier="arrow-up-from-bracket" />
+                        </Button.Content>
+                    </Button>
+                </Border>
+            </Grid>
+        </Border>
+        <wv2:WebView2 x:Name="WebView2Control"
+                      DefaultBackgroundColor="#343b48"
+                      Loaded="WebView2Control_OnLoaded"
+                      Grid.Row="1"
+                      GotFocus="WebView2Control_OnGotFocus" />
+    </Grid>
+</Window>

@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Threading.Tasks;
 using System.Windows;
 using CodeShare.Core;
 
-namespace CodeShare
+namespace CodeShare.Windows
 {
     public partial class InstallWindow : Window
     {

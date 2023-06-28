@@ -40,10 +40,6 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
     <WarningLevel>7</WarningLevel>
   </PropertyGroup>
-
-  <ItemGroup>
-    <Folder Include="MVVM\ViewModel\" />
-  </ItemGroup>
 	
   <ItemGroup>
 	<Content Include="Assets\Fonts\**">

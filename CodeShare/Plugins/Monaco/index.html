@@ -30,26 +30,13 @@
         var editor = monaco.editor.create(document.getElementById('container'), {
             value: '',
             language: 'plaintext',
+            minimap: {
+                renderCharacters: false
+            },
             roundedSelection: false,
             scrollBeyondLastLine: false,
             automaticLayout: true
         });
-
-        const fileTypes = {
-            txt: 'plaintext',
-            cfg: 'ini',
-            ini: 'ini',
-            conf: 'ini',
-            json: 'json',
-            yaml: 'yaml',
-            yml: 'yaml',
-            xml: 'xml',
-            properties: 'properties',
-            md: 'markdown'
-        }
-
-        // Add an event listener for the resize event
-
 
         loadMonacoThemes();
         monaco.editor.setTheme('simpleEditDark');
@@ -78,14 +65,20 @@
             });
         }
 
-        function openText(content, type) {
+        function openText(content, path) {
             editor.setValue(content);
 
-            if (type) {
-                const language = fileTypes[type] || 'plaintext';
-                const model = monaco.editor.createModel(editor.getValue(), language);
+            if (path) {
+                const model = monaco.editor.createModel(editor.getValue(), undefined, monaco.Uri.file(path));
                 editor.setModel(model);
             }
+
+            return editor.getModel().getLanguageId();
+        }
+
+        function setLang(id) {
+            const model = monaco.editor.createModel(editor.getValue(), id);
+            editor.setModel(model);
         }
     </script>
 </body>

@@ -6,6 +6,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using CodeShare.Core;
 using CodeShare.MVVM.Model;
+using CodeShare.Windows;
 using Hardcodet.Wpf.TaskbarNotification;
 using NHotkey;
 using NHotkey.Wpf;
@@ -16,6 +17,7 @@ namespace CodeShare
     {
         public static ConfigWindow ConfigWindow = new();
         public static ToolbarWindow ToolbarWindow = new();
+        public static CodeSnippetEditorWindow CodeSnippetEditorWindow = new();
         private readonly HotKey _toolbarHk = new("ToolbarHotKey", ModifierKeys.Control | ModifierKeys.Alt, Key.F);
         private TaskbarIcon? _notifyIcon;
 
@@ -55,6 +57,21 @@ namespace CodeShare
             ToolbarWindow.Show();
         }
 
+        public static void OpenCodeSnippetEditorWindow()
+        {
+            var isSuccessful = WindowTools.TryOpenWindow(App.CodeSnippetEditorWindow);
+            if (isSuccessful) return;
+            CodeSnippetEditorWindow = new CodeSnippetEditorWindow();
+            CodeSnippetEditorWindow.Show();
+        }
+
+        public static void OpenCodeSnippetEditorWindow(CodeSnippetEditorWindow overrideWindow)
+        {
+            CodeSnippetEditorWindow.Close();
+            CodeSnippetEditorWindow = overrideWindow;
+            CodeSnippetEditorWindow.Show();
+        }
+
         // App Events
         private void Application_Startup(object sender, StartupEventArgs e)
         {
@@ -85,14 +102,10 @@ namespace CodeShare
         // Event based methods
         private static void HandleToolbarHk(object? sender, HotkeyEventArgs? e)
         {
-            var clipboardBackup = Clipboard.GetText();
-
-            Thread.Sleep(500);
-            System.Windows.Forms.SendKeys.SendWait("^c");
+            //Thread.Sleep(500);
+            //System.Windows.Forms.SendKeys.SendWait("^c");
             var selectedText = Clipboard.GetText();
             OpenToolbarWindow(new ToolbarWindow(selectedText));
-
-            Clipboard.SetText(clipboardBackup);
         }
 
         public void PrepareShutdown()

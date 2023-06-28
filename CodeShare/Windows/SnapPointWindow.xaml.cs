@@ -4,7 +4,7 @@ using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 
-namespace CodeShare
+namespace CodeShare.Windows
 {
     public partial class SnapPointWindow : Window
     {

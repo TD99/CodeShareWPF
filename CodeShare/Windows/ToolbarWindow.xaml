@@ -1,14 +1,16 @@
-﻿<Window x:Class="CodeShare.ToolbarWindow"
+﻿<Window x:Class="CodeShare.Windows.ToolbarWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:controls="clr-namespace:CodeShare.Controls"
-        xmlns:local="clr-namespace:CodeShare"
+        xmlns:viewmodel="clr-namespace:CodeShare.MVVM.ViewModel"
+        xmlns:converters="clr-namespace:CodeShare.Converters"
+        xmlns:local="clr-namespace:CodeShare.Windows"
         mc:Ignorable="d"
         Title="ToolbarWindow"
         Height="55"
-        Width="400"
+        Width="325"
         WindowStyle="None"
         Topmost="True"
         AllowsTransparency="True"
@@ -19,20 +21,27 @@
         AllowDrop="True"
         PreviewDragEnter="Window_PreviewDragEnter"
         PreviewDragLeave="Window_PreviewDragLeave"
-        Drop="Window_Drop">
+        Drop="Window_Drop"
+        d:DataContext="{d:DesignInstance Type=viewmodel:ToolbarViewModel}">
+    <Window.Resources>
+        <converters:InvertibleNotNullConverter x:Key="NotNullConverter" />
+    </Window.Resources>
+
     <Border x:Name="ToolbarBorder"
             CornerRadius="10"
-            BorderBrush="#6654e8"
+            BorderBrush="#7c88bc"
             BorderThickness="1.5"
             Background="#1f1f1f"
-            Padding="10">
+            Padding="8">
         <Grid>
             <Border x:Name="DragNDropBorder"
-                    BorderThickness="3"
-                    BorderBrush="White"
-                    CornerRadius="10">
-                <Rectangle Fill="#88FFFFFF" />
-
+                    BorderThickness="2"
+                    CornerRadius="10"
+                    Background="#88505772">
+                <TextBlock Text="Release here"
+                           Foreground="White"
+                           VerticalAlignment="Center"
+                           HorizontalAlignment="Center" />
                 <Border.Style>
                     <Style TargetType="Border">
                         <Style.Triggers>
@@ -50,11 +59,26 @@
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
-                
-                <Button x:Name="DbgBtn"
-                        Grid.Column="0"
-                        Style="{StaticResource ToolbarButton}" />
 
+                <Button x:Name="CodePreviewBtn"
+                        Click="CodePreviewBtn_OnClick"
+                        FontSize="10"
+                        HorizontalContentAlignment="Left"
+                        Padding="10 0"
+                        Grid.Column="0">
+                    <Button.Style>
+                        <Style TargetType="Button" BasedOn="{StaticResource ToolbarButton}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding DisplayCode, Converter={StaticResource NotNullConverter}}" Value="False">
+                                    <Setter Property="Content" Value="CTRL + C, CTRL + Alt + F&#x0a;or Drag'n'Drop" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding DisplayCode, Converter={StaticResource NotNullConverter}}" Value="True">
+                                    <Setter Property="Content" Value="{Binding DisplayCode}" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
                 <Rectangle Width="0.5"
                            Margin="5, 0"
                            Fill="#5b5970"
@@ -77,8 +101,9 @@
                             Style="{StaticResource ToolbarButton}">
                         <Button.Content>
                             <controls:Icon FontFamily="{StaticResource FaSolid}"
-                                           Unicode="f78c"
-                                           Identifier="minimize" />
+                                           FontSize="15"
+                                           Unicode="f00d"
+                                           Identifier="xmark" />
                         </Button.Content>
                     </Button>
                 </StackPanel>
@@ -90,7 +115,7 @@
                   X2="50"
                   Y2="0"
                   Stroke="Transparent"
-                  StrokeThickness="10"
+                  StrokeThickness="8"
                   HorizontalAlignment="Center"
                   MouseEnter="MoveLine_MouseEnter"
                   MouseLeave="MoveLine_MouseLeave" />

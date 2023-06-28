@@ -1,33 +1,40 @@
 ﻿using System;
 using System.IO;
+using System.Threading;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using CodeShare.Core;
+using CodeShare.MVVM.Model;
+using CodeShare.MVVM.ViewModel;
 using CodeShare.Properties;
 using Microsoft.Win32;
 
-namespace CodeShare
+namespace CodeShare.Windows
 {
     public partial class ToolbarWindow : Window
     {
         private bool _isDragging = false;
         private Point _mouseOffset;
         private Point _defaultCenter;
+        private ToolbarViewModel _toolbarViewModel;
 
-        public ToolbarWindow(string? selected = null)
+        public ToolbarWindow(string? code = null, string? title = null, string? path = null, Language? language = null)
         {
             InitializeComponent();
+            DataContext = new ToolbarViewModel();
+            _toolbarViewModel = (ToolbarViewModel)this.DataContext;
+
             this._defaultCenter = new Point((SystemParameters.WorkArea.Width - this.ActualWidth) / 2, 20);
             WindowTools.HideWindowFromAltTab(this);
             SystemEvents.DisplaySettingsChanged += OnDisplaySettingsChanged;
             this.LocationChanged += MainWindow_LocationChanged;
 
-            if (selected != null)
-            {
-                DbgBtn.Content = selected;
-            }
+            _toolbarViewModel.Code = string.IsNullOrEmpty(code) ? null : code;
+            _toolbarViewModel.Title = title;
+            _toolbarViewModel.Path = path;
+            _toolbarViewModel.Language = language;
         }
 
         private void OnDisplaySettingsChanged(object? sender, EventArgs? e)
@@ -162,6 +169,8 @@ namespace CodeShare
             ToolbarButtonGrid.Visibility = Visibility.Visible;
 
             string? text = null;
+            string? title = null;
+            string? path = null;
 
             if (e.Data.GetDataPresent(DataFormats.FileDrop))
             {
@@ -170,6 +179,16 @@ namespace CodeShare
 
                 if (!File.Exists(file)) return;
 
+                if (TextTools.GetSizeInMbFile(file) > 5)
+                {
+                    Thread.Sleep(100);
+                    MessageBox.Show("File is too big (> 5MB).");
+                    return;
+                }
+
+                title = System.IO.Path.GetFileNameWithoutExtension(file);
+                path = file;
+
                 text = File.ReadAllText(file);
             }
             else if (e.Data.GetDataPresent(DataFormats.Text))
@@ -177,12 +196,36 @@ namespace CodeShare
                 text = (string?)e.Data.GetData(DataFormats.Text);
             }
 
-            App.OpenToolbarWindow(new ToolbarWindow(text));
+            if (TextTools.GetSizeInMb(text) > 5)
+            {
+                Thread.Sleep(100);
+                MessageBox.Show("Content is too big (> 5MB).");
+                return;
+            }
+
+            if (TextTools.IsBinary(text))
+            {
+                Thread.Sleep(100);
+                var result = MessageBox.Show("Binary content is not recommended. Continue?", "", MessageBoxButton.YesNo);
+                if (result == MessageBoxResult.No) return;
+            }
+
+            _toolbarViewModel.Code = text;
+            _toolbarViewModel.Title = title;
+            _toolbarViewModel.Path = path;
         }
 
         private void Window_PreviewDragLeave(object sender, DragEventArgs e)
         {
             ToolbarButtonGrid.Visibility = Visibility.Visible;
+        }
+
+        private void CodePreviewBtn_OnClick(object sender, RoutedEventArgs e)
+        {
+            App.OpenCodeSnippetEditorWindow
+            (
+                new CodeSnippetEditorWindow(_toolbarViewModel.Code, _toolbarViewModel.Title, _toolbarViewModel.Path, _toolbarViewModel.Language, this)
+            );
         }
     }
 }
