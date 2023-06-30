@@ -8,10 +8,10 @@
     <Setting Name="ServerUrl" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="BearerToken" Type="System.String" Scope="User">
+    <Setting Name="WebUri" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="WebUri" Type="System.String" Scope="User">
+    <Setting Name="CurrentUser" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
   </Settings>

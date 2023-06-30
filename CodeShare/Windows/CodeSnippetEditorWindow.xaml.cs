@@ -3,11 +3,14 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
+using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using CodeShare.MVVM.Model;
 using System.Windows.Controls;
+using CodeShare.Core;
 
 namespace CodeShare.Windows
 {
@@ -19,11 +22,14 @@ namespace CodeShare.Windows
         private string? _extension;
         private Language? _language;
         private List<Language>? _languages;
+        private string? _mode;
+        private string? _id;
+        private string? _created_at;
 
         private bool _isFocusFlop = false;
         private bool _isFullyLoaded = false;
 
-        public CodeSnippetEditorWindow(string? code = "", string? name = "", string? extension = "", Language? language = null, Control? initiator = null)
+        public CodeSnippetEditorWindow(string? code = "", string? name = "", string? extension = "", Language? language = null, Control? initiator = null, string? mode = "NEW", string? id = null, string? created_at = null)
         {
             InitializeComponent();
             _initiator = initiator;
@@ -31,6 +37,9 @@ namespace CodeShare.Windows
             _name = name;
             _extension = extension;
             _language = language;
+            _mode = mode;
+            _id = id;
+            _created_at = created_at;
 
             WebView2Control.CoreWebView2InitializationCompleted += WebView2Control_OnCoreWebView2InitializationCompleted;
             WebView2Control.PreviewKeyDown += (sender, e) =>
@@ -41,11 +50,27 @@ namespace CodeShare.Windows
                     _ => e.Handled
                 };
             };
+
+            switch (_mode)
+            {
+                case "NEW":
+                    break;
+                case "EDIT":
+                    ShareIcon.Identifier = "pen-to-square";
+                    ShareIcon.Unicode = "f044";
+                    break;
+                case "VIEW":
+                    ShareBorder.Visibility = Visibility.Collapsed;
+                    InputTitle.IsReadOnly = true;
+                    InputTitle.IsReadOnlyCaretVisible = true;
+                    break;
+            }
         }
 
         private void WebView2Control_OnLoaded(object sender, RoutedEventArgs e)
         {
-            WebView2Control.Source = new Uri(System.IO.Path.GetFullPath("Plugins/Monaco/index.html"));
+            string applicationLocation = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
+            WebView2Control.Source = new Uri(Path.Combine(applicationLocation, "Plugins/Monaco/index.html"));
         }
 
         private void WebView2Control_OnCoreWebView2InitializationCompleted(object? sender, CoreWebView2InitializationCompletedEventArgs e)
@@ -149,6 +174,64 @@ namespace CodeShare.Windows
             if (code.Length <= 0) return;
 
             App.OpenToolbarWindow(new ToolbarWindow(code, InputTitle.Text, _extension, InputLanguage.ComboBoxSelectedItem as Language));
+        }
+
+        private async void ShareBtn_OnClick(object sender, RoutedEventArgs e)
+        {
+            if (_mode == "EDIT")
+            {
+                var result = await ApiConnect.PutSnippet
+                (
+                    new Snippet
+                    (
+                        _id,
+                        AccountManager.GetCurrentUser().Id,
+                        await GetCode(),
+                        InputTitle.Text,
+                        (InputLanguage.ComboBoxSelectedItem as Language).Id,
+                        _created_at
+                    )
+                );
+
+                if (!result)
+                {
+                    MessageBox.Show("Snippet can't be updated!");
+                    return;
+                }
+
+                App.CodeSnippetEditorWindow.Close();
+                App.OpenConfigWindow
+                (
+                    new ConfigWindow()
+                );
+            }
+            else if (_mode == "NEW")
+            {
+                var result = await ApiConnect.PostSnippet
+                (
+                    new Snippet
+                    (
+                        "%",
+                        AccountManager.GetCurrentUser().Id,
+                        await GetCode(),
+                        InputTitle.Text,
+                        (InputLanguage.ComboBoxSelectedItem as Language).Id,
+                        "%"
+                    )
+                );
+
+                if (!result)
+                {
+                    MessageBox.Show("Snippet can't be created!");
+                    return;
+                }
+
+                App.CodeSnippetEditorWindow.Close();
+                App.OpenConfigWindow
+                (
+                    new ConfigWindow()
+                );
+            }
         }
     }
 }

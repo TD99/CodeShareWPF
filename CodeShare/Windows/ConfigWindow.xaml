@@ -9,7 +9,7 @@
         mc:Ignorable="d"
         Title="Configuration"
         WindowStartupLocation="CenterScreen"
-        Height="550"
+        Height="650"
         Width="850">
     <Window.Resources>
         <converters:AddValueConverter x:Key="AddValueConverter" />

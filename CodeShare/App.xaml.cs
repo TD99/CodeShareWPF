@@ -1,6 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
+using System.IO;
+using System.Linq;
+using System.Reflection;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -8,6 +14,7 @@ using CodeShare.Core;
 using CodeShare.MVVM.Model;
 using CodeShare.Windows;
 using Hardcodet.Wpf.TaskbarNotification;
+using Microsoft.Win32;
 using NHotkey;
 using NHotkey.Wpf;
 
@@ -20,6 +27,9 @@ namespace CodeShare
         public static CodeSnippetEditorWindow CodeSnippetEditorWindow = new();
         private readonly HotKey _toolbarHk = new("ToolbarHotKey", ModifierKeys.Control | ModifierKeys.Alt, Key.F);
         private TaskbarIcon? _notifyIcon;
+
+        private const string URI_SCHEME = "csh";
+        private const string FRIENDLY_NAME = "CodeShare";
 
         public App()
         {
@@ -73,19 +83,115 @@ namespace CodeShare
         }
 
         // App Events
-        private void Application_Startup(object sender, StartupEventArgs e)
+        private async void Application_Startup(object sender, StartupEventArgs e)
         {
-            foreach (var arg in e.Args)
+            int currentProcId = Process.GetCurrentProcess().Id;
+            string procName = Process.GetCurrentProcess().ProcessName;
+            Process[] processes = Process.GetProcessesByName(procName);
+            foreach (Process proc in processes)
             {
-                switch (arg)
+                if (proc.Id != currentProcId)
                 {
-                    case "/Install":
-                        new InstallWindow().Show();
-                        return;
+                    proc.Kill();
                 }
             }
 
+            var uri = Get_AppURI(e.Args);
+            if (uri == null)
+            {
+                foreach (var arg in e.Args)
+                {
+                    switch (arg)
+                    {
+                        case "/Install":
+                            new InstallWindow().Show();
+                            return;
+                    }
+                }
+            }
+            else
+            {
+                await ProcessAppURI(uri);
+            }
+
+            RegisterURIScheme();
+
             InitTaskbarIcon();
+        }
+
+        private async Task ProcessAppURI(Uri uri)
+        {
+            try
+            {
+                string URIStr = uri.OriginalString.Substring(uri.OriginalString.IndexOf(":") + 1);
+                string[] pairs = URIStr.Split('&');
+
+                Dictionary<string, string> URIArgs = pairs
+                    .Select(pair => pair.Split('='))
+                    .ToDictionary(keyValue => Uri.UnescapeDataString(keyValue[0]), keyValue => Uri.UnescapeDataString(keyValue[1]));
+
+                foreach (string arg in URIArgs.Keys)
+                {
+                    switch (arg)
+                    {
+                        case "viewid":
+                            try
+                            {
+                                var snippet = await ApiConnect.GetSnippetById(URIArgs[arg]);
+                                OpenCodeSnippetEditorWindow
+                                (
+                                    new CodeSnippetEditorWindow
+                                    (
+                                        snippet.Content,
+                                        snippet.Title,
+                                        "",
+                                        new Language(snippet.Language),
+                                        null,
+                                        (AccountManager.GetCurrentUser().Id == snippet.UserId) ? "EDIT" : "VIEW",
+                                        snippet.InternalId,
+                                        snippet.CreatedAt
+                                    )
+                                );
+
+                            }
+                            catch
+                            {
+                                MessageBox.Show("Snippet could not be found!");
+                            }
+                            break;
+                    }
+                }
+            }
+            catch { }
+        }
+
+        private void RegisterURIScheme()
+        {
+            try
+            {
+                using (var key = Registry.CurrentUser.CreateSubKey("SOFTWARE\\Classes\\" + URI_SCHEME))
+                {
+                    string applicationLocation =
+                        Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), nameof(CodeShare) + ".exe");
+
+                    key.SetValue("", "URL:" + FRIENDLY_NAME);
+                    key.SetValue("URL Protocol", "");
+
+                    using (var defaultIcon = key.CreateSubKey("DefaultIcon"))
+                    {
+                        defaultIcon.SetValue("", applicationLocation + ",0");
+                    }
+
+                    using (var commandKey = key.CreateSubKey(@"shell\open\command"))
+                    {
+                        commandKey.SetValue("", "\"" + applicationLocation + "\" \"%1\"");
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("An Error occured while registering URI Schemes: " + e.Message);
+            }
         }
 
         private void OnProcessExit(object? sender, EventArgs? e)
@@ -152,6 +258,20 @@ namespace CodeShare
             }
 
             ToolbarWindow.Show();
+        }
+
+        private Uri? Get_AppURI(string[] args)
+        {
+            if (args.Length > 0)
+            {
+                if (Uri.TryCreate(args[0], UriKind.Absolute, out var uri) &&
+                    string.Equals(uri.Scheme, URI_SCHEME, StringComparison.OrdinalIgnoreCase))
+                {
+                    return uri;
+                }
+            }
+
+            return null;
         }
     }
 }

@@ -11,15 +11,15 @@ namespace CodeShare.MVVM.Model
         public string? DisplayName => Aliases?.First();
 
         [JsonProperty("extensions")]
-        public string[] Extensions { get; set; }
+        public string[]? Extensions { get; set; }
 
         [JsonProperty("aliases")]
-        public string[] Aliases { get; set; }
+        public string[]? Aliases { get; set; }
 
         [JsonProperty("mimetypes")]
-        public string[] MimeTypes { get; set; }
+        public string[]? MimeTypes { get; set; }
 
-        public Language(string id, string[] extensions, string[] aliases, string[] mimeTypes)
+        public Language(string id, string[]? extensions = null, string[]? aliases = null, string[]? mimeTypes = null)
         {
             Id = id;
             Extensions = extensions;

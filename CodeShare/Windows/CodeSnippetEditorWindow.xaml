@@ -64,15 +64,19 @@
                                         ComboBoxSelectedValuePath="Id"
                                         ComboBoxSelectionChangedEvenHandler="InputLanguage_OnComboBoxSelectionChangedEvenHandler" />
                 </controls:ExtendedWrapPanel>
-                <Border BorderThickness="1"
+                <Border x:Name="ShareBorder"
+                        BorderThickness="1"
                         BorderBrush="#999999"
                         CornerRadius="5"
                         Grid.Column="1">
-                    <Button Style="{StaticResource ModernButton}"
+                    <Button x:Name="ShareBtn"
+                            Style="{StaticResource ModernButton}"
                             Background="#55000000"
-                            IsTabStop="False">
+                            IsTabStop="False"
+                            Click="ShareBtn_OnClick">
                         <Button.Content>
-                            <controls:Icon FontFamily="{StaticResource FaSolid}"
+                            <controls:Icon x:Name="ShareIcon"
+                                           FontFamily="{StaticResource FaSolid}"
                                            Unicode="e09a"
                                            Identifier="arrow-up-from-bracket" />
                         </Button.Content>

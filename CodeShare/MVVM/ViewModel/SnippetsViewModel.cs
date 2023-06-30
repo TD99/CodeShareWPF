@@ -19,7 +19,7 @@ namespace CodeShare.MVVM.ViewModel
 
         public SnippetsViewModel()
         {
-            IsLoggedIn = !string.IsNullOrWhiteSpace(Settings.Default.BearerToken);
+            IsLoggedIn = !string.IsNullOrWhiteSpace(Settings.Default.CurrentUser);
         }
     }
 }

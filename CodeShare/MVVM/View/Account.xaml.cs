@@ -11,7 +11,7 @@ using static System.Text.RegularExpressions.Regex;
 
 namespace CodeShare.MVVM.View
 {
-    public partial class Register : Page
+    public partial class Account : Page
     {
         private const string EmptyMessage = "'{0}' is a required field. It can't be empty!";
         private const string RegexMessage = "'{0}' must be in the format '{1}'!";
@@ -27,9 +27,10 @@ namespace CodeShare.MVVM.View
 
         private const string PasswordPattern = @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$";
 
-        public Register()
+        public Account()
         {
             InitializeComponent();
+            FillFields();
 
             InputPassword.PasswordBox.PasswordChanged += (o, e) =>
             {
@@ -37,78 +38,20 @@ namespace CodeShare.MVVM.View
             };
         }
 
-        //private void Login_Click(object sender, RoutedEventArgs e)
-        //{
-        //    this.NavigationService.Navigate(new Login());
-        //}
-        //private void Reset_Click(object sender, RoutedEventArgs e)
-        //{
-        //    Reset();
-        //}
-        //public void Reset()
-        //{
-        //    textBoxName.Text = "";
-        //    textBoxGitUserName.Text = "";
-        //    textBoxEmail.Text = "";
-        //    passwordBox1.Password = "";
-        //    passwordBoxConfirm.Password = "";
-        //}
-        //private void Cancel_Click(object sender, RoutedEventArgs e)
-        //{
-        //    //this.Close();
-        //}
-
-        //private void Submit_Click(object sender, RoutedEventArgs e)
-        //{
-        //    if (textBoxEmail.Text.Length == 0)
-        //    {
-        //        errormessage.Text = "Enter an email.";
-        //        textBoxEmail.Focus();
-        //    }
-        //    else if (!Regex.IsMatch(textBoxEmail.Text, @"^[a-zA-Z][\w\.-]*[a-zA-Z0-9]@[a-zA-Z0-9][\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]$"))
-        //    {
-        //        errormessage.Text = "Enter a valid email.";
-        //        textBoxEmail.Select(0, textBoxEmail.Text.Length);
-        //        textBoxEmail.Focus();
-        //    }
-        //    else
-        //    {
-        //        string name = textBoxName.Text;
-        //        string gitusername = textBoxGitUserName.Text;
-        //        string email = textBoxEmail.Text;
-        //        string password = passwordBox1.Password;
-        //        if (passwordBox1.Password.Length == 0)
-        //        {
-        //            errormessage.Text = "Enter password.";
-        //            passwordBox1.Focus();
-        //        }
-        //        else if (passwordBoxConfirm.Password.Length == 0)
-        //        {
-        //            errormessage.Text = "Enter Confirm password.";
-        //            passwordBoxConfirm.Focus();
-        //        }
-        //        else if (passwordBox1.Password != passwordBoxConfirm.Password)
-        //        {
-        //            errormessage.Text = "Confirm password must be same as password.";
-        //            passwordBoxConfirm.Focus();
-        //        }
-        //        else
-        //        {
-        //            errormessage.Text = "";
-        //            SqlConnection con = new SqlConnection("Data Source=TESTPURU;Initial Catalog=Data;User ID=sa;Password=wintellect");
-        //            con.Open();
-        //            SqlCommand cmd = new SqlCommand("Insert into Registration (Name,GitUserName,Email,Password) values('" + name + "','" + gitusername + "','" + email + "','" + password + "')", con);
-        //            cmd.CommandType = CommandType.Text;
-        //            cmd.ExecuteNonQuery();
-        //            con.Close();
-        //            errormessage.Text = "You have Registered successfully.";
-        //            Reset();
-        //        }
-        //    }
-        //}
-        private void LoginBtn_OnMouseDown(object sender, MouseButtonEventArgs e)
+        public void FillFields()
         {
-            NavigationService?.Navigate(new Login());
+            var user = AccountManager.GetCurrentUser();
+            InputId.Text = user?.Id;
+            InputEmail.Text = user?.Username ?? "";
+            InputGitHubUserName.Text = user?.GithubName ?? "";
+            InputRegion.Text = user?.Region ?? "";
+
+            DateTime dateTime = DateTime.Parse(user?.CreatedAt);
+            dateTime = DateTime.SpecifyKind(dateTime, DateTimeKind.Local);
+            TimeSpan offset = TimeZoneInfo.Local.GetUtcOffset(dateTime);
+            dateTime = dateTime - offset;
+
+            CreatedAt.Text = dateTime.ToString("G");
         }
 
         private async void Submit_OnClick(object sender, RoutedEventArgs e)
@@ -117,20 +60,22 @@ namespace CodeShare.MVVM.View
             {
                 Validate();
 
-                var result = await AccountManager.Create
+                var cUser = AccountManager.GetCurrentUser();
+
+                var result = await AccountManager.Update(
                 (
                     new User
                     (
-                        "%",
+                        cUser.Id,
                         InputEmail.Text,
                         InputGitHubUserName.Text,
-                        RegionInfo.CurrentRegion.DisplayName,
+                        cUser.Region,
                         InputPassword.Password,
-                        "%"
+                        cUser.CreatedAt
                     )
-                );
+                ));
 
-                if (!result) MessageBox.Show("An error occured while creating your account.");
+                if (!result) MessageBox.Show("An error occured while updating your account.");
 
                 var (message, isSuccessful) = await AccountManager.Login(InputEmail.Text, InputPassword.Password);
 
@@ -161,6 +106,28 @@ namespace CodeShare.MVVM.View
             }
         }
 
+        private void Logout_OnClick(object sender, RoutedEventArgs e)
+        {
+            AccountManager.Logout();
+        }
+
+        private async void Delete_OnMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            var result = MessageBox.Show("Do you really want to delete your account?", "", MessageBoxButton.YesNo);
+            if (result != MessageBoxResult.Yes) return;
+
+            bool isSuccessful = await AccountManager.Delete();
+            if (isSuccessful)
+            {
+                MessageBox.Show("Your account has been successfully deleted.");
+                AccountManager.Logout();
+            }
+            else
+            {
+                MessageBox.Show("An error occured while deleting your account.");
+            }
+        }
+
         private void Validate()
         {
             // E-Mail
@@ -174,10 +141,6 @@ namespace CodeShare.MVVM.View
                 throw new ControlException(InputPassword, string.Format(EmptyMessage, InputPassword.Caption));
             if (!IsMatch(InputPassword.Password, PasswordPattern))
                 throw new ControlException(InputPassword, string.Format(PasswordMessage, InputPassword.Caption));
-
-            // Repeat Password
-            if (InputPasswordRepeat.Password != InputPassword.Password)
-                throw new ControlException(InputPasswordRepeat, string.Format(MatchMessage, InputPasswordRepeat.Caption, InputPassword.Caption));
         }
     }
 }

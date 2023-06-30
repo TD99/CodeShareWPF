@@ -1,8 +1,13 @@
-﻿<Page x:Class="CodeShare.MVVM.View.Login"
-      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"  
+﻿<Page x:Class="CodeShare.MVVM.View.Account"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:controls="clr-namespace:CodeShare.Controls"
-      Title="Login">
+      xmlns:local="clr-namespace:CodeShare.MVVM.View"
+      mc:Ignorable="d" 
+      Title="Account">
+
     <Grid>
         <Border Padding="15"
                 CornerRadius="10"
@@ -21,46 +26,65 @@
                           HorizontalScrollBarVisibility="Disabled">
                 <StackPanel>
                     <TextBlock x:Name="TextBlockHeading"
-                               Text="Login"
+                               Text="Account"
                                FontSize="25"
                                FontWeight="Regular"
                                FontStretch="ExtraCondensed" />
+                    <controls:FormInput x:Name="InputId"
+                                        Caption="Id"
+                                        IsReadOnly="True"
+                                        IsReadOnlyCaretVisible="True"
+                                        Margin="0 10 0 0" />
                     <controls:FormInput x:Name="InputEmail"
                                         Caption="E-Mail"
                                         Hint="max.mustermann@gmail.com"
                                         IsRequired="True"
                                         Margin="0 10 0 0" />
+                    <controls:FormInput x:Name="InputGitHubUserName"
+                                        Caption="GitHub Username"
+                                        Hint="MaxTheProgrammer"
+                                        Margin="0 10 0 0" />
                     <controls:FormInput x:Name="InputPassword"
                                         Caption="Password"
+                                        RequirementCaption="8 characters, uppercase, lowercase, number"
                                         RequirementCaptionColor="DarkRed"
-                                        Hint="SecretPassword123"
                                         IsPassword="True"
                                         IsRequired="True"
                                         Margin="0 10 0 0" />
+                    <controls:FormInput x:Name="InputRegion"
+                                        Caption="Region"
+                                        IsReadOnly="True"
+                                        IsReadOnlyCaretVisible="True"
+                                        Margin="0 10 0 0" />
+                    <StackPanel Orientation="Horizontal"
+                                Margin="0 5 0 0">
+                        <TextBlock Text="Created at: " />
+                        <TextBlock x:Name="CreatedAt" />
+                    </StackPanel>
                     <Button x:Name="Submit"
-                            Content="Submit"
+                            Content="Update" 
                             HorizontalAlignment="Stretch"
                             Padding="10"
                             Margin="0 10 0 0"
                             Style="{StaticResource ModernButton}"
                             Click="Submit_OnClick" />
+                    <Button x:Name="Logout"
+                            Content="Logout" 
+                            HorizontalAlignment="Stretch"
+                            Padding="10"
+                            Margin="0 10 0 0"
+                            Style="{StaticResource ModernButton}"
+                            Click="Logout_OnClick" />
                     <StackPanel Orientation="Horizontal"
                                 Margin="0 10 0 0">
-                        <TextBlock Text="Do you want to list all accounts? " />
-                        <TextBlock x:Name="List"
+                        <TextBlock Text="Do you want to delete your account? "
+                                   Foreground="DarkRed" />
+                        <TextBlock x:Name="Delete"
                                    Text="Click here"
+                                   Foreground="DarkRed"
                                    TextDecorations="Underline"
                                    Cursor="Hand"
-                                   MouseDown="List_OnMouseDown"/>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal"
-                                Margin="0 10 0 0">
-                        <TextBlock Text="Don't have an account? " />
-                        <TextBlock x:Name="RegisterBtn"
-                                   Text="Register"
-                                   TextDecorations="Underline"
-                                   Cursor="Hand"
-                                   MouseDown="RegisterBtn_OnMouseDown" />
+                                   MouseDown="Delete_OnMouseDown"/>
                     </StackPanel>
                 </StackPanel>
             </ScrollViewer>

@@ -3,6 +3,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Navigation;
 using CodeShare.MVVM.View;
+using CodeShare.Properties;
 
 namespace CodeShare.Windows
 {
@@ -18,7 +19,7 @@ namespace CodeShare.Windows
         public ConfigWindow()
         {
             InitializeComponent();
-            PageFrame.Navigate(UserRouterPage);
+            PageFrame.Navigate(!string.IsNullOrWhiteSpace(Settings.Default.CurrentUser) ? SnippetsPage : UserRouterPage);
         }
 
         private void NavUserBtn_OnClick(object sender, RoutedEventArgs e)

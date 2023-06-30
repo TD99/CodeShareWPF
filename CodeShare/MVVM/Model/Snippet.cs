@@ -7,7 +7,7 @@ namespace CodeShare.MVVM.Model
         [JsonProperty ("id")]
         public string InternalId { get; set; }
 
-        [JsonProperty("user_id")]
+        [JsonProperty("userId")]
         public string UserId { get; set; }
 
         [JsonProperty("content")]
@@ -19,7 +19,7 @@ namespace CodeShare.MVVM.Model
         [JsonProperty("language")]
         public string? Language { get; set; }
 
-        [JsonProperty("created_at")]
+        [JsonProperty("createdAt")]
         public string? CreatedAt { get; set; }
 
         public Snippet(string internalId, string userId, string? content, string? title, string? language, string? createdAt)
